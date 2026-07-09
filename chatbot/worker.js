@@ -310,7 +310,12 @@ async function callAIAPI(question, systemPrompt, env) {
   const API_KEY = env.AI_API_KEY;
   const MODEL = env.AI_MODEL;
   
-  const response = await fetch(API_URL, {
+  // 确保 URL 以 /chat/completions 结尾
+  const fullUrl = API_URL.endsWith('/chat/completions') 
+    ? API_URL 
+    : `${API_URL.replace(/\/$/, '')}/chat/completions`;
+  
+  const response = await fetch(fullUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -334,3 +339,4 @@ async function callAIAPI(question, systemPrompt, env) {
   const data = await response.json();
   return data.choices[0].message.content;
 }
+
